@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 #define MAX_ARGS 64
 #define MAX_ARG_LEN 16
@@ -59,7 +60,7 @@ int main(int argc, char *argv[]) {
     char cmdLine[MAX_LINE_LEN];
     struct command_t command;
 
-    while (TRUE) {
+    while (1) {
         printPrompt();
         /* Read the command line and parse it */
         readCommand(cmdLine);
@@ -126,7 +127,7 @@ void printPrompt() {
     /* Build the prompt string to have the machine name,
      * current directory, or other desired information
      */
-    promptString = ...;
+    char promptString[] = "Test:";
     printf("%s ", promptString);
 }
 
