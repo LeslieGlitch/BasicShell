@@ -37,6 +37,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define MAX_ARGS 64
 #define MAX_ARG_LEN 16
@@ -79,7 +81,7 @@ int main(int argc, char *argv[]) {
             execvp(command.name, command.argv);
         }
         /* Wait for the child to terminate */
-        wait(&status); /* EDIT THIS LINE */
+        wait(NULL);
     }
 
     /* Shell termination */
