@@ -16,7 +16,7 @@ $(TARGET): $(SRCS)
 # Run the application with warning message
 run: $(TARGET)
 	@echo "Run shell"
-	@echo "[ATTENTION: TERMINAL SHOULD PRINT \"500\" BELOW. CANCEL OPERATION AND RUN \"ulimit -u 500\" IF IT SAYS \"unlimited\"!]"
+	@echo "[ATTENTION: TERMINAL SHOULD PRINT \"2500\" BELOW. CANCEL OPERATION AND RUN \"ulimit -u 2500\" IF IT SAYS \"unlimited\"!]"
 	@bash -c "ulimit -u" && ./$(TARGET)
 
 # Clean build files
