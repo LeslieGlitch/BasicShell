@@ -6,8 +6,19 @@
  names like "minishell.h"
 
 ## Documentation
+
+### Compiling
+In order to compile the code and run it, follow
+the following instructions:  
+1. Create a new directory with `mkdir build`
+2. Move into the directory with `cd build`
+3. Build file with `cmake ..`
+4. Set ulimit with `ulimit -u 500`
+5. Run the program with `make run`
+
+### Commands
 Below is a list of valid commands. Text in \<angle
-brackets> can be chosen by the user.
+brackets> can be chosen by the user.  
 ```rust
 C <file1> <file2>       // Copy <file1> to <file2>, creates <file2> if needed
 D <file>                // Delete <file>

@@ -55,6 +55,7 @@ struct command_t {
 int parseCommand(char *, struct command_t *);
 void printPrompt();
 void readCommand(char *);
+void printHelp();
 
 int main(int argc, char *argv[]) {
     int pid;
@@ -69,16 +70,63 @@ int main(int argc, char *argv[]) {
         parseCommand(cmdLine, &command);
         command.argv[command.argc] = NULL;
 
-        /*
-           TODO: if the command is one of the shortcuts you're testing for
-           either execute it directly or build a new command structure to
-           execute next
-        */
+        /* Test for quit command separately from others */
+        if (*command.argv[0] == 'Q') {
+            break;
+        }
+
+        /* Convert shell commands to unix commands */
+        char* cmd = command.name; /* Holds unix conversion of command */
+        switch(*command.argv[0]) {
+            case 'C': /* Copy <file1> to <file2>, creates <file2> if needed */
+                cmd = "cp";
+                command.name = cmd;
+                break;
+            case 'D': /* Delete <file> */
+                cmd = "rm";
+                command.name = cmd;
+                break;
+            case 'E': /* Echo <comment> */
+                cmd = "echo";
+                command.name = cmd;
+                break;
+            case 'H': /* Help menu, displays documentation */
+                printHelp();
+                break;
+            case 'L': /* Lists the contents of the current directory */
+                printf("\n");
+                cmd = "ls";
+                command.argc = 2;
+                command.argv[1] = "-l";
+                command.name = cmd;
+                break;
+            case 'M': /* Make; creates <file> via text editor */
+                cmd = "nano";
+                command.name = cmd;
+                break;
+            case 'P': /* Prints contents of <file> to screen */
+                cmd = "more";
+                command.name = cmd;
+                break;
+            case 'W': /* Wipe; clears the screen */
+                cmd = "clear";
+                command.name = cmd;
+                break;
+            case 'X': /* Executes <program> */
+                ; /* Empty statement prevents prefix error */
+                char prefix[] = "./";
+                command.name = strcat(prefix, command.argv[1]);
+                break;
+            case '\0':
+                printf("linux (4787112)|>\n");
+                break;
+        }
 
         /* Create a child process to execute the command */
         if ((pid = fork()) == 0) {
             /* Child executing command */
             execvp(command.name, command.argv);
+            exit(0);
         }
         /* Wait for the child to terminate */
         wait(NULL);
@@ -129,7 +177,7 @@ void printPrompt() {
     /* Build the prompt string to have the machine name,
      * current directory, or other desired information
      */
-    char promptString[] = "Test:";
+    char promptString[] = "\nEnter Command:";
     printf("%s ", promptString);
 }
 
@@ -143,3 +191,23 @@ void readCommand(char *buffer) {
 }
 
 /* End printPrompt and readCommand */
+
+/* Print Help Menu */
+
+void printHelp() {
+    printf("Help menu:\n");
+    printf("Below is a list of valid commands. Text in <angle brackets> can be chosen by the user.\n\n");
+    printf("C <file1> <file2>       // Copy <file1> to <file2>, creates <file2> if needed\n");
+    printf("D <file>                // Delete <file>\n");
+    printf("E <comment>             // Echo <comment>\n");
+    printf("H                       // Help menu, displays documentation\n");
+    printf("L                       // Lists the contents of the current directory\n");
+    printf("M <file>                // Make; creates <file> via text editor\n");
+    printf("P <file>                // Prints contents of <file> to screen\n");
+    printf("Q                       // Quit shell program\n");
+    printf("W                       // Wipe; clears the screen\n");
+    printf("X <program>             // Executes <program>\n\n");
+    printf("If a command is issued outside of this list, it will be passed to `execvp()` and executed normally.\n");
+}
+
+/* End printHelp */
