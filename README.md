@@ -11,7 +11,6 @@
 In order to compile the code and run it, follow
 the following instructions:  
 1. Move into the build directory with `cd build`
-3. Build file with `cmake ..`
 4. Set ulimit with `ulimit -u 500`
 5. Run the program with `make run`
 
